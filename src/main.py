@@ -156,8 +156,8 @@ def produce_3DTiles_sunlight(sun_datas_list: pySunlight.SunDatasList, tiler: Til
     # Merge all tiles to create one TileSet
     tileset = tiler.read_and_merge_tilesets()
     # writer = CsvWriter()
-    writer = JsonWriter()
-    # writer = TileWriter(None, tiler)
+    # writer = JsonWriter()
+    writer = TileWriter(None, tiler)
 
     # Export a 3D Tiles containing the geometry if export does not provide geometry export
     # So we can associate a geometry with a result in vizualisation
@@ -218,7 +218,6 @@ def main():
     tiler.parse_command_line()
 
     produce_3DTiles_sunlight(sunParser.getSunDatas(), tiler, args)
-
 
 if __name__ == '__main__':
     main()
