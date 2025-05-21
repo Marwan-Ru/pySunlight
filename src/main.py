@@ -9,7 +9,7 @@ from src.Aggregators.AggregatorController import \
     AggregatorControllerInBatchTable
 from src.Converters import SunlightToTiler, TilerToSunlight
 from src.TileWrapper import TileWrapper
-from src.Writers import JsonWriter, TileWriter, Writer
+from src.Writers import JsonWriter, TileWriter, Writer, CsvWriter
 
 
 def export_with_triangle_level(tiler: TilesetTiler, tileset: TileSet):
@@ -155,9 +155,12 @@ def produce_3DTiles_sunlight(sun_datas_list: pySunlight.SunDatasList, tiler: Til
     """
     # Merge all tiles to create one TileSet
     tileset = tiler.read_and_merge_tilesets()
-    # writer = CsvWriter()
-    # writer = JsonWriter()
-    writer = TileWriter(None, tiler)
+    if args.export_format == "CSV":
+        writer = CsvWriter()
+    elif args.export_format == "JSON":
+        writer = JsonWriter()
+    else:
+        writer = TileWriter(None, tiler)
 
     # Export a 3D Tiles containing the geometry if export does not provide geometry export
     # So we can associate a geometry with a result in vizualisation
@@ -202,6 +205,9 @@ def parse_command_line():
     # Set Logging level for the whole application
     parser.add_argument('--log-level', '-log', dest='log_level', default='WARNING', choices=logging._nameToLevel.keys(), help='Provide logging level. Ex : --log-level DEBUG, default=WARNING')
 
+    # Choosing export format
+    parser.add_argument('--export-format', '-f', dest='export_format', default='TILE', choices=['TILE', 'CSV', 'JSON'], help='Choose export format from TILE, CSV or JSON. default=TILE')
+
     return parser.parse_known_args()[0]
 
 
@@ -218,6 +224,7 @@ def main():
     tiler.parse_command_line()
 
     produce_3DTiles_sunlight(sunParser.getSunDatas(), tiler, args)
+
 
 if __name__ == '__main__':
     main()
