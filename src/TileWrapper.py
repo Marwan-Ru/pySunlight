@@ -1,4 +1,4 @@
-from py3dtiles.tile import Tile
+from py3dtiles.tileset import Tile
 
 from src.Converters import TilerToSunlight
 from src.pySunlight import BoundingBoxes
@@ -24,7 +24,7 @@ class TileWrapper():
         self.index = tile_index
 
         # Read bounding box in tile content and convert to Sunlight bounding box (AABB)
-        bounding_box = TilerToSunlight.convert_to_bounding_box(tile.get_bounding_volume(), str(tile_index), tile.get_content_uri())
+        bounding_box = TilerToSunlight.convert_to_bounding_box(tile.bounding_volume, str(tile_index), tile.content_uri)
 
         # Contain only one bounding box, because Sunlight API require a list of bounding box
         self.bounding_box = BoundingBoxes()

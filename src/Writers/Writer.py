@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 from py3dtilers.Common import FeatureList
-from py3dtiles import TileSet
+from py3dtiles import tileset
 
 # The Writer class is a placeholder for a code implementation of Sunlight result export.
 
@@ -40,7 +40,7 @@ class Writer():
         path = Path(self.directory)
         path.mkdir(parents=True, exist_ok=True)
 
-    def export_tileset(self, tileset: TileSet):
+    def export_tileset(self, tileset: tileset):
         """
         The function exports a tileset to a specified directory, but returns an error if the directory
         is not defined.

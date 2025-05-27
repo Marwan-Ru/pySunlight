@@ -3,7 +3,7 @@ import logging
 from pathlib import Path
 
 from py3dtilers.TilesetReader.TilesetReader import TilesetTiler
-from py3dtiles import TileSet
+from py3dtiles import tileset
 from src import Utils, pySunlight
 from src.Aggregators.AggregatorController import \
     AggregatorControllerInBatchTable
@@ -12,7 +12,7 @@ from src.TileWrapper import TileWrapper
 from src.Writers import JsonWriter, TileWriter, Writer, CsvWriter
 
 
-def export_with_triangle_level(tiler: TilesetTiler, tileset: TileSet):
+def export_with_triangle_level(tiler: TilesetTiler, tileset: tileset):
     """
     The function exports a 3D Tiles file with triangle-level features from a given tileset.
 
@@ -56,14 +56,14 @@ def is_closer(testing_ray_hit, nearest_ray_hit: pySunlight.RayHit):
     return not nearest_ray_hit or testing_ray_hit.distance < nearest_ray_hit.distance
 
 
-def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, writer: Writer):
+def compute_3DTiles_sunlight(tileset: tileset, sun_datas: pySunlight.SunDatas, writer: Writer):
     """
     The function `compute_3DTiles_sunlight` computes sunlight visibility for each triangle in a 3D
     tileset and exports the results.
 
     :param tileset: The `tileset` parameter is an object of type `TileSet`. It represents a collection
     of tiles that make up a 3D model or scene
-    :type tileset: TileSet
+    :type tileset: TileSetd
     :param sun_datas: The `sun_datas` parameter is an object of type `pySunlight.SunDatas`. It contains
     information about the sun, such as the date and direction
     :type sun_datas: pySunlight.SunDatas
@@ -72,7 +72,7 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
     :type writer: Writer
     """
     # Loop in tileset.json
-    all_tiles = tileset.get_root_tile().get_children()
+    all_tiles = tileset.root_tile.get_all_children()
     for tile_index, tile in enumerate(all_tiles):
         logging.debug(f"Load triangles from tile {tile_index} ...")
 

@@ -4,7 +4,7 @@ from filecmp import cmp
 from pathlib import Path
 
 from py3dtilers.TilesetReader.TilesetReader import TilesetTiler
-from py3dtiles import TilesetReader
+from py3dtiles.tileset import TileSet
 from src.main import compute_3DTiles_sunlight
 from src.pySunlight import SunDatas, Vec3d
 from src.Writers import CsvWriter, TileWriter
@@ -14,15 +14,23 @@ import shutil
 # Test if the computed result is identical to a previous result
 
 
+def propagate_root_uri(tile, root_uri: Path):
+    tile.root_uri = root_uri
+    for child in tile.children:
+        propagate_root_uri(child, root_uri)
+
+
 class TestIdenticalResult(unittest.TestCase):
     def test_identical_result_in_csv(self):
         TESTING_DIRECTORY = 'datas/testing'
 
         # Define basic input
-        tileset = TilesetReader().read_tileset(f'{TESTING_DIRECTORY}/b3dm_tileset/')
+        tileset = TileSet.from_file(Path(f'{TESTING_DIRECTORY}/b3dm_tileset/tileset.json'))
         sun_datas = SunDatas("2016-01-01:0800", Vec3d(1888857.649890, 5136065.174273, 12280.013599), Vec3d(0.748839, -0.630358, 0.204667))
         writer = CsvWriter(TESTING_DIRECTORY, 'junk.csv')
         writer.create_directory()
+
+        propagate_root_uri(tileset.root_tile, f'{TESTING_DIRECTORY}/b3dm_tileset/')
 
         # Compute result
         compute_3DTiles_sunlight(tileset, sun_datas, writer)
@@ -44,7 +52,7 @@ class TestIdenticalResult(unittest.TestCase):
         # Define tiler for TileWriter definition
         tiler = TilesetTiler()
         tiler.args = Namespace(obj=None, loa=None, lod1=False, crs_in='EPSG:3946', crs_out='EPSG:3946', offset=[0, 0, 0], with_texture=False, scale=1, output_dir=JUNK_DIRECTORY, geometric_error=[None, None, None], kd_tree_max=None, texture_lods=0)
-        tileset = TilesetReader().read_tileset(f'{ORIGINAL_DIRECTORY}/original/')
+        tileset = TileSet.from_file(Path(f'{ORIGINAL_DIRECTORY}/original/tileset.json'))
 
         writer = TileWriter(JUNK_DIRECTORY, tiler)
         writer.create_directory()

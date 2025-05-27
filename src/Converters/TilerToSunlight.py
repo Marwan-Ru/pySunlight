@@ -4,9 +4,9 @@ import logging
 
 import numpy as np
 from py3dtilers.Common import FeatureList, Feature
-from py3dtiles import TileSet
-from py3dtiles.bounding_volume_box import BoundingVolumeBox
-from py3dtiles.tile import Tile
+from py3dtiles import tileset
+from py3dtiles.tileset.bounding_volume_box import BoundingVolumeBox
+from py3dtiles.tileset import Tile
 
 from .. import pySunlight
 from ..Converters import TilerToSunlight
@@ -42,7 +42,7 @@ def convert_to_sunlight_triangle(tiler_triangle, triangle_id=None, tile_name=Non
     b = convert_numpy_to_vec3(tiler_triangle[1])
     c = convert_numpy_to_vec3(tiler_triangle[2])
 
-    return pySunlight.Triangle(a, b, c, triangle_id, tile_name)
+    return pySunlight.Triangle(a, b, c, triangle_id, tile_name.as_posix())
 
 
 def convert_to_bounding_box(bounding_box: BoundingVolumeBox, id=None, tile_name=None):
@@ -69,10 +69,10 @@ def convert_to_bounding_box(bounding_box: BoundingVolumeBox, id=None, tile_name=
     min_sunlight = convert_numpy_to_vec3(min)
     max_sunlight = convert_numpy_to_vec3(max)
 
-    return pySunlight.AABB(min_sunlight, max_sunlight, id, tile_name)
+    return pySunlight.AABB(min_sunlight, max_sunlight, id, tile_name.as_posix())
 
 
-def get_tiles_bounding_boxes_from_tileset(tileset: TileSet):
+def get_tiles_bounding_boxes_from_tileset(tileset: tileset):
     """
     The function `get_tiles_bounding_boxes_from_tileset` takes a `TileSet` object, retrieves all the
     tiles from it, converts their bounding volumes to bounding boxes, and returns a collection of these
@@ -154,8 +154,8 @@ def add_triangles_from_feature(triangle_soup: pySunlight.TriangleSoup, feature: 
     """
     # Convert py3DTiler triangles to sunlight triangle
     for i, triangle in enumerate(feature.get_geom_as_triangles()):
-        triangle_id = generate_triangle_id(tile.get_content_uri(), feature.get_id(), i)
-        sunlight_triangle = convert_to_sunlight_triangle(triangle, triangle_id, tile.get_content_uri())
+        triangle_id = generate_triangle_id(tile.content_uri, feature.get_id(), i)
+        sunlight_triangle = convert_to_sunlight_triangle(triangle, triangle_id, tile.content_uri)
         triangle_soup.push_back(sunlight_triangle)
 
 
@@ -174,7 +174,7 @@ def get_triangle_soup_from_tile(tile: Tile, tile_index: int):
     :type tile_index: int
     :return: a `TriangleSoup` object.
     """
-    feature_list = TileToFeatureList(tile)
+    feature_list = TileToFeatureList(tile, tile.root_uri)
 
     all_triangles = pySunlight.TriangleSoup()
     for feature in feature_list:

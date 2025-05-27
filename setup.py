@@ -42,7 +42,7 @@ class CMakeBuild(build_ext):
 # The latests scipy version require a more recent numpy version that was incompatible with py3dTilers and py3DTiles.
 # It's also fix the issue of batch table order : https://github.com/VCityTeam/py3dtilers/issues/163
 requirements = (
-    'py3dtilers @ git+https://github.com/VCityTeam/py3dtilers@3bf0ccd0e974a4e070de3a32c807cb78cc3fc7e9',
+    'py3dtilers @ git+https://github.com/VCityTeam/py3dtilers',
 
     # Display memory size TODO move in dev requirements after removing all usages in main files
     'pympler'

@@ -3,8 +3,9 @@ from pathlib import Path
 import numpy as np
 from py3dtilers.Common import (FeatureList, FromGeometryTreeToTileset,
                                GeometryNode)
-from py3dtilers.TilesetReader.TilesetReader import TilesetReader, TilesetTiler
-from py3dtiles import TileSet
+from py3dtilers.TilesetReader.TilesetReader import TilesetTiler
+from py3dtilers import TilesetReader
+from py3dtiles import tileset
 from py3dtilers.TilesetReader.tile_to_feature import TileToFeatureList
 
 from ..Utils import sort_batchtable_data_by_custom_order
@@ -34,7 +35,7 @@ class TileWriter(Writer):
     def can_export_geometry(self):
         return True
 
-    def export_tileset(self, tileset: TileSet):
+    def export_tileset(self, tileset: tileset):
         """
         The function exports a tileset by writing it as a JSON file, with each tile's content URI set to
         a specific location.

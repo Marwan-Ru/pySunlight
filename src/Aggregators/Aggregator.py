@@ -2,7 +2,7 @@ from typing import List
 
 import numpy as np
 from py3dtilers.Common import FeatureList
-from py3dtilers.TilesetReader.TilesetReader import TilesetReader
+from py3dtilers import TilesetReader
 
 from .. import Utils
 from ..Converters import TilerToSunlight
