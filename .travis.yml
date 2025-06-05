@@ -13,7 +13,8 @@ jobs:
       python: "3.9"
       install:
         - pip install -e .[dev]  # Triggers cmake under the hood
-      script:
+        - pip install numpy==1.21.0 # Fixing Py3Dtilers dependency conflict
+      script: 
         - flake8 .
         - pytest tests
     - stage: "Markdown link checks"

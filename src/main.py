@@ -83,6 +83,7 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
 
         # Intialize containers
         results = SunlightToTiler.convert_to_feature_list_with_triangle_level(tile_wrapper.get_triangles())
+        featurelist = results.get_features()
 
         # Record ray hits accross the whole tile comparaison to get the closest intersection
         ray_hits_by_index = dict()
@@ -102,7 +103,7 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
                 if not pySunlight.isFacingTheSun(triangle, sun_datas.direction):
                     # Associate shadow with the same triangle, because there's
                     # nothing blocking it but itself
-                    temp_feature = results.get_features()[triangle_index]
+                    temp_feature = featurelist[triangle_index]
                     SunlightToTiler.record_result_in_batch_table(temp_feature, sun_datas.dateStr, False, triangle.getId())
                     continue
 
