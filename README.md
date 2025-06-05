@@ -54,7 +54,13 @@ pySunlight is one repository of the Sunlight project, including :
 1. Install python 3.9.
 
    ```
-   apt-get install python3.9 python3.9-dev
+   apt-get install python3.9 python3.9-dev python3.9-venv
+   ```
+
+   or
+
+   ```
+   apt-get install python3.9-full
    ```
 
 2. [Follow the install guide of PostgreSQL / PostGIS](https://github.com/VCityTeam/UD-SV/blob/master/Install/Setup_PostgreSQL_PostGIS_Ubuntu.md).
@@ -91,6 +97,7 @@ pySunlight is one repository of the Sunlight project, including :
 
    ```
    pip install -e .
+   pip install --force-reinstall numpy==1.21.0 # This fixes py3DTilers broken numpy requirements
    ```
 
 ## For Mac OS
@@ -137,6 +144,7 @@ Additionnaly, and because py3dTilers requires it (although pySunlight doesn't),
 
    ```
    pip install -e .
+   pip install --force-reinstall numpy==1.21.0 # This fixes py3DTilers broken numpy requirements
    ```
 
 ## For Windows
@@ -175,6 +183,7 @@ Additionnaly, and because py3dTilers requires it (although pySunlight doesn't),
 
    ```
    pip install -e .
+   pip install --force-reinstall numpy==1.21.0 # This fixes py3DTilers broken numpy requirements
    ```
 
 ## Usage
@@ -196,6 +205,7 @@ Here is a full list of all options available :
 | --end-date, -e        | End date of sunlight computation                                                                                      | -e 403248                                 |
 | --with-aggregate      | Add aggregate to 3DTiles export, heavely impact performance                                                           | --with-aggregate                          |
 | --log-level, -log     | Provide logging level depending on [logging module](https://docs.python.org/3/howto/logging.html#when-to-use-logging) | -log DEBUG                                |
+| --export-format, -f| Choose export format from TILE, CSV or JSON. default=TILE | -f TILE                                |
 
 # Contributing
 
@@ -232,7 +242,7 @@ Here is the pipeline we follow for pySunlight :
 
 ```
 pySunlight (repo)
-├── datas                     # Datas use for testing
+├── datas                     # Datas used for testing
 ├── docs                      # Documentations (original charts...)
 ├── src                       # Source code
 ├── Sunlight                  # Sunlight repository as git submodule
@@ -244,6 +254,7 @@ pySunlight (repo)
 ├── README.md
 ├── pySunlight.i              # SWIG interface file to expose Sunlight in python
 ├── setup.py                  # Install python requirements
+├── pytest.ini                # Specify test environment
 ```
 
 ## License
