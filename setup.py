@@ -45,7 +45,8 @@ requirements = (
     'py3dtilers @ git+https://github.com/VCityTeam/py3dtilers@3bf0ccd0e974a4e070de3a32c807cb78cc3fc7e9',
 
     # Display memory size TODO move in dev requirements after removing all usages in main files
-    'pympler'
+    'pympler',
+    'numpy==1.20.3'
 )
 
 dev_requirements = (

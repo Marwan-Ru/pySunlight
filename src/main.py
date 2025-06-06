@@ -9,7 +9,7 @@ from src.Aggregators.AggregatorController import \
     AggregatorControllerInBatchTable
 from src.Converters import SunlightToTiler, TilerToSunlight
 from src.TileWrapper import TileWrapper
-from src.Writers import JsonWriter, TileWriter, Writer
+from src.Writers import JsonWriter, TileWriter, Writer, CsvWriter
 
 
 def export_with_triangle_level(tiler: TilesetTiler, tileset: TileSet):
@@ -83,6 +83,7 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
 
         # Intialize containers
         results = SunlightToTiler.convert_to_feature_list_with_triangle_level(tile_wrapper.get_triangles())
+        featurelist = results.get_features()
 
         # Record ray hits accross the whole tile comparaison to get the closest intersection
         ray_hits_by_index = dict()
@@ -102,7 +103,7 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
                 if not pySunlight.isFacingTheSun(triangle, sun_datas.direction):
                     # Associate shadow with the same triangle, because there's
                     # nothing blocking it but itself
-                    temp_feature = results.get_features()[triangle_index]
+                    temp_feature = featurelist[triangle_index]
                     SunlightToTiler.record_result_in_batch_table(temp_feature, sun_datas.dateStr, False, triangle.getId())
                     continue
 
@@ -155,9 +156,12 @@ def produce_3DTiles_sunlight(sun_datas_list: pySunlight.SunDatasList, tiler: Til
     """
     # Merge all tiles to create one TileSet
     tileset = tiler.read_and_merge_tilesets()
-    # writer = CsvWriter()
-    writer = JsonWriter()
-    # writer = TileWriter(None, tiler)
+    if args.export_format == "CSV":
+        writer = CsvWriter()
+    elif args.export_format == "JSON":
+        writer = JsonWriter()
+    else:
+        writer = TileWriter(None, tiler)
 
     # Export a 3D Tiles containing the geometry if export does not provide geometry export
     # So we can associate a geometry with a result in vizualisation
@@ -201,6 +205,9 @@ def parse_command_line():
 
     # Set Logging level for the whole application
     parser.add_argument('--log-level', '-log', dest='log_level', default='WARNING', choices=logging._nameToLevel.keys(), help='Provide logging level. Ex : --log-level DEBUG, default=WARNING')
+
+    # Choosing export format
+    parser.add_argument('--export-format', '-f', dest='export_format', default='TILE', choices=['TILE', 'CSV', 'JSON'], help='Choose export format from TILE, CSV or JSON. default=TILE')
 
     return parser.parse_known_args()[0]
 
