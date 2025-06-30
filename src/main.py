@@ -56,7 +56,7 @@ def is_closer(testing_ray_hit, nearest_ray_hit: pySunlight.RayHit):
     return not nearest_ray_hit or testing_ray_hit.distance < nearest_ray_hit.distance
 
 
-def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, writer: Writer):
+def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, writer: Writer, anexTileset : TileSet = None):
     """
     The function `compute_3DTiles_sunlight` computes sunlight visibility for each triangle in a 3D
     tileset and exports the results.
@@ -73,6 +73,11 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
     """
     # Loop in tileset.json
     all_tiles = tileset.get_root_tile().get_children()
+    if anexTileset == None:
+        compared_tiles = all_tiles
+    else:
+        compared_tiles = anexTileset.get_root_tile().get_children()
+        compared_tiles.extend(all_tiles)
     for tile_index, tile in enumerate(all_tiles):
         logging.debug(f"Load triangles from tile {tile_index} ...")
 
@@ -90,7 +95,7 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
 
         # We loop on tiles to compare with triangle in order to load a tile once
         # and not for each triangle
-        for other_tile_index, other_tile in enumerate(all_tiles):
+        for other_tile_index, other_tile in enumerate(compared_tiles):
 
             # Avoid to read and convert a tile already loaded with pool system, gain in performance and memory
             if tile_index == other_tile_index:
