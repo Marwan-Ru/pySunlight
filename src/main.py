@@ -3,7 +3,7 @@ import logging
 from pathlib import Path
 
 from py3dtilers.TilesetReader.TilesetReader import TilesetTiler
-from py3dtiles import TileSet
+from py3dtiles import TileSet, TilesetReader
 from src import Utils, pySunlight
 from src.Aggregators.AggregatorController import \
     AggregatorControllerInBatchTable
@@ -183,7 +183,10 @@ def produce_3DTiles_sunlight(sun_datas_list: pySunlight.SunDatasList, tiler: Til
         writer.set_directory(CURRENT_OUTPUT_DIRECTORY)
         writer.create_directory()
 
-        compute_3DTiles_sunlight(tileset, sun_datas, writer)
+        if args.secondary != None:
+            compute_3DTiles_sunlight(tileset, sun_datas, writer, TilesetReader().read_tileset(args.secondary))
+        else:
+            compute_3DTiles_sunlight(tileset, sun_datas, writer)
 
     if args.with_aggregate:
         aggregator = AggregatorControllerInBatchTable(tiler.get_output_dir(), writer)
@@ -203,6 +206,7 @@ def parse_command_line():
     """
     parser = argparse.ArgumentParser(description='Light pre-calculation based on real data (urban data and sun position) with 3DTiles.')
     parser.add_argument('--paths', '--path', '--db_config_path', '--file_path', '-i', nargs='*', type=str, help='Paths to input files or directories.')
+    parser.add_argument('--secondary', type=str, help='Paths to secondary input files or directories.')
     parser.add_argument('--output_dir', '--out', '-o', nargs='?', type=str, help='Output directory of Sunlight results.')
     parser.add_argument('--start-date', '-s', dest='start_date', type=int, help='Start date of sunlight computation. Ex : --start-date 403224', required=True)
     parser.add_argument('--end-date', '-e', dest='end_date', type=int, help='End date of sunlight computation. Ex : --end-date 403248', required=True)  # type: ignore
