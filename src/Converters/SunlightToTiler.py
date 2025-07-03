@@ -54,6 +54,27 @@ def convert_to_feature(triangle: pySunlight.Triangle):
     return triangle_as_feature
 
 
+def convert_soup_to_feature(triangle_soup: pySunlight.TriangleSoup):
+    """
+    This function converts a pySunlight.TriangleSoup object into a single feature, where the whole soup is represented as a feature.
+    :param triangle_soup: The parameter `triangle_soup` is of type `pySunlight.TriangleSoup`. It is
+    a data structure that represents a collection of triangles supported by Sunlight.
+    :type triangle_soup: pySunlight.TriangleSoup
+    :return: a `Feature` object containing the triangle soup as its geometry.
+    """
+
+    soup_as_feature = Feature()
+    tiler_triangles = [] #Will store all of triangles converted into pySunlight triangles
+
+    # Set geometry
+    for triangle in triangle_soup:
+        tiler_triangles.append(convert_to_tiler_triangle(triangle))
+    
+    soup_as_feature.geom.triangles.append(tiler_triangles)
+    return soup_as_feature
+
+
+
 def convert_to_feature_list_with_triangle_level(triangle_soup: pySunlight.TriangleSoup):
     """
     The function converts a pySunlight.TriangleSoup object into a feature list, where each triangle is represented
