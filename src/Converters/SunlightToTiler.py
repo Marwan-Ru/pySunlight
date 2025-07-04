@@ -64,7 +64,7 @@ def convert_soup_to_feature(triangle_soup: pySunlight.TriangleSoup):
     """
 
     soup_as_feature = Feature()
-    tiler_triangles = [] #Will store all of triangles converted into pySunlight triangles
+    tiler_triangles = [] #Will store all of the triangles converted into pySunlight triangles
 
     # Set geometry
     for triangle in triangle_soup:
