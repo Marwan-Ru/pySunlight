@@ -70,6 +70,9 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
     :param writer: The `writer` parameter is an object of the `Writer` class. It is used to export the
     computed results and the updated `tileset.json` file
     :type writer: Writer
+    :param anexTileset: The `anexTileset` prameter is optional, it represents a secondary tileset, that will shade the primary tileset.
+    This tileset will not be shaded and will be absent from the output
+    :type anexTileset: TileSet
     """
     # Loop in tileset.json
     all_tiles = tileset.get_root_tile().get_children()
