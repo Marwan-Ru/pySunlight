@@ -5,7 +5,7 @@ from src.Converters import TilerToSunlight
 from src import pySunlight
 # py3DTiles
 from py3dtiles.bounding_volume_box import BoundingVolumeBox
-from py3dtiles.tile import Tile
+from py3dtiles.tile import Tile, TileContent
 # py3DTilerrrrrrrrrrs
 from py3dtilers.Common import FeatureList, Feature
 
@@ -46,3 +46,25 @@ class TestConversionTilerToSunlight(unittest.TestCase):
 
         self.assertTrue(aabb_sunlight.max == result.max and aabb_sunlight.min == result.min, "Wrong conversion from AABB")
         self.assertTrue(aabb_from_oriented.max == result_from_oriented.max and aabb_from_oriented.min == result_from_oriented.min, "Wrong conversion from oriented bounding box")
+
+    def test_add_triangle_from_feature(self):
+        triangle_soup = pySunlight.TriangleSoup()
+        
+        #TODO Create triangles for this feature 
+        feature = Feature("test")
+        feature.geom.triangles.append([[np.array([1, 2, 3]), np.array([2, 3, 1]), np.array([3, 2, 1])], [np.array([2, 2, 2]), np.array([1, 3, 1]), np.array([4.5, 2, 1])]])
+        
+        # To build a Tile from scratch, you need a TileContent 
+        tile = Tile()
+        tile.set_content(TileContent())
+        tile.set_content_uri("test")
+
+        TilerToSunlight.add_triangles_from_feature(triangle_soup, feature, tile, 1)
+
+        triangle2 = triangle_soup.pop()
+        triangle = triangle_soup.pop()
+
+        self.assertEqual(triangle.a.getX(), 1, "Triangle is corrupted")
+        self.assertEqual(triangle2.c.getX(), 4.5, "Triangle is corrupted")
+        self.assertEqual(triangle.m_id, "Tile-test__Feature-test__Triangle-0", "Wrong triangle id")
+        self.assertEqual(triangle2.m_id, "Tile-test__Feature-test__Triangle-1", "Wrong triangle id")
