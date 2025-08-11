@@ -43,12 +43,34 @@ class CsvWriter(Writer):
         path_str = str(self.get_path())
         with open(path_str, 'a', newline='') as file:
             writer = csv.writer(file)
+            
+            writer.writerow(["tile;feature;triangle;date;lighted;occludingTile;occludingFeature;occludingTriangle"])
 
             # Append each batch table result
             for feature in feature_list:
-                output = f'{feature.get_id()};'
 
-                for value in feature.batchtable_data.values():
-                    output += f'{value};'
+                #Extracting actual ids from the weird stuff that they've been doing
+                ID = feature.get_id()
+                TileId = ID[ID.find("/")+1:ID.find(".b3dm")]
+                FeatureID = ID[ID.find("Feature")+8:ID.find("__Triangle")]
+                TriangleID = ID[ID.find("Triangle")+9:]
+
+
+                output = f'{TileId};{FeatureID};{TriangleID};'
+
+                values = [value for key, value in feature.batchtable_data.items()]
+
+                for i in range(len(values) - 1):
+                    output += f'{values[i]};'
+                
+                if values[1] == True:
+                    output += ';;;'
+                else:
+                    ID = values[2]
+                    TileId = ID[ID.find("/")+1:ID.find(".b3dm")]
+                    FeatureID = ID[ID.find("Feature")+8:ID.find("__Triangle")]
+                    TriangleID = ID[ID.find("Triangle")+9:]
+
+                    output += f'{TileId};{FeatureID};{TriangleID};'
 
                 writer.writerow([output.strip()])
