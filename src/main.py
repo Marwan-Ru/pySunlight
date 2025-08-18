@@ -165,7 +165,7 @@ def produce_3DTiles_sunlight(sun_datas_list: pySunlight.SunDatasList, tiler: Til
     # Merge all tiles to create one TileSet
     tileset = tiler.read_and_merge_tilesets()
     if args.export_format == "CSV":
-        writer = CsvWriter()
+        writer = CsvWriter(args.output_dir)
     elif args.export_format == "JSON":
         writer = JsonWriter()
     else:

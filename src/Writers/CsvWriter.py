@@ -41,10 +41,18 @@ class CsvWriter(Writer):
 
         # Append all result / batch table content in the same csv
         path_str = str(self.get_path())
+        firstline = False
+
+        # Checking if we're on the first line and writing the header if we are
+        with open(path_str, 'r', newline='') as file:
+            if len(file.readlines()) < 1:
+                firstline = True
+
         with open(path_str, 'a', newline='') as file:
             writer = csv.writer(file)
             
-            writer.writerow(["tile;feature;triangle;date;lighted;occludingTile;occludingFeature;occludingTriangle"])
+            if firstline:
+                writer.writerow(["tile;feature;triangle;date;lighted;occludingTile;occludingFeature;occludingTriangle"])
 
             # Append each batch table result
             for feature in feature_list:
@@ -64,13 +72,13 @@ class CsvWriter(Writer):
                     output += f'{values[i]};'
                 
                 if values[1] == True:
-                    output += ';;;'
+                    output += ';;'
                 else:
                     ID = values[2]
                     TileId = ID[ID.find("/")+1:ID.find(".b3dm")]
                     FeatureID = ID[ID.find("Feature")+8:ID.find("__Triangle")]
                     TriangleID = ID[ID.find("Triangle")+9:]
 
-                    output += f'{TileId};{FeatureID};{TriangleID};'
+                    output += f'{TileId};{FeatureID};{TriangleID}'
 
                 writer.writerow([output.strip()])
