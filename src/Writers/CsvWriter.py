@@ -50,19 +50,18 @@ class CsvWriter(Writer):
 
         with open(path_str, 'a', newline='') as file:
             writer = csv.writer(file)
-            
+
             if firstline:
                 writer.writerow(["tile;feature;triangle;date;lighted;occludingTile;occludingFeature;occludingTriangle"])
 
             # Append each batch table result
             for feature in feature_list:
 
-                #Extracting actual ids from the weird stuff that they've been doing
+                # Extracting actual ids from the weird stuff that they've been doing
                 ID = feature.get_id()
-                TileId = ID[ID.find("/")+1:ID.find(".b3dm")]
-                FeatureID = ID[ID.find("Feature")+8:ID.find("__Triangle")]
-                TriangleID = ID[ID.find("Triangle")+9:]
-
+                TileId = ID[ID.find("/") + 1:ID.find(".b3dm")]
+                FeatureID = ID[ID.find("Feature") + 8:ID.find("__Triangle")]
+                TriangleID = ID[ID.find("Triangle") + 9:]
 
                 output = f'{TileId};{FeatureID};{TriangleID};'
 
@@ -70,14 +69,14 @@ class CsvWriter(Writer):
 
                 for i in range(len(values) - 1):
                     output += f'{values[i]};'
-                
-                if values[1] == True:
+
+                if values[1]:
                     output += ';;'
                 else:
                     ID = values[2]
-                    TileId = ID[ID.find("/")+1:ID.find(".b3dm")]
-                    FeatureID = ID[ID.find("Feature")+8:ID.find("__Triangle")]
-                    TriangleID = ID[ID.find("Triangle")+9:]
+                    TileId = ID[ID.find("/") + 1:ID.find(".b3dm")]
+                    FeatureID = ID[ID.find("Feature") + 8:ID.find("__Triangle")]
+                    TriangleID = ID[ID.find("Triangle") + 9:]
 
                     output += f'{TileId};{FeatureID};{TriangleID}'
 

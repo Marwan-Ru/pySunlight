@@ -16,9 +16,9 @@ class TestIntersection(unittest.TestCase):
 
     # Detecting if it collides correctly with a triangle it should intersect with
     def test_collision_with_other_triangle(self):
-        t1 = Triangle(Vec3d(1, 1, 0), Vec3d(-3,-3, 0), Vec3d(2,2, 0)) #Triangle with a centroid in 0,0,0
+        t1 = Triangle(Vec3d(1, 1, 0), Vec3d(-3, -3, 0), Vec3d(2, 2, 0))  # Triangle with a centroid in 0,0,0
         t2 = Triangle(Vec3d(1, 1, 1), Vec3d(-1, -1, 1), Vec3d(-2, 1, 1))
-        
+
         ray = constructRay(t1, Vec3d(0, 0, 1))
 
         triangle_soup = TriangleSoup()

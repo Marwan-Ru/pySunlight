@@ -4,10 +4,9 @@ import numpy as np
 from src.Converters import SunlightToTiler
 from src import pySunlight
 
-# py3DTiles
-from py3dtiles.tile import Tile, TileContent
 # py3DTilers
 from py3dtilers.Common import Feature
+
 
 class TestConversionSunlightToTiler(unittest.TestCase):
     def test_convert_vec3_to_numpy(self):
@@ -21,9 +20,9 @@ class TestConversionSunlightToTiler(unittest.TestCase):
 
         resultd = SunlightToTiler.convert_vec3_to_numpy(dvec3)
 
-        self.assertTrue(np.equal(intarray, resultint).all() , "Wrong conversion with int vec3")
+        self.assertTrue(np.equal(intarray, resultint).all(), "Wrong conversion with int vec3")
         self.assertTrue(np.equal(darray, resultd).all(), "Wrong conversion with double vec3")
-                          
+
     def test_convert_to_tiler_triangle(self):
         tiler_triangle = [np.array([1, 2, 3]), np.array([2, 3, 1]), np.array([3, 2, 1])]
         sunlight_triangle = pySunlight.Triangle(pySunlight.Vec3d(1, 2, 3), pySunlight.Vec3d(2, 3, 1), pySunlight.Vec3d(3, 2, 1), "test", "test")
@@ -42,7 +41,7 @@ class TestConversionSunlightToTiler(unittest.TestCase):
         result = SunlightToTiler.convert_to_feature(sunlight_triangle)
 
         self.assertTrue(np.equal(result.centroid, feature.centroid).all(), "Centroid shifted during conversion")
-        self.assertTrue(np.equal(result.get_geom_as_triangles() , feature.get_geom_as_triangles()).all(), "Geometry error when converting")
+        self.assertTrue(np.equal(result.get_geom_as_triangles(), feature.get_geom_as_triangles()).all(), "Geometry error when converting")
 
     def test_convert_to_feature_list_with_triangle_level(self):
         sunlight_triangle = pySunlight.Triangle(pySunlight.Vec3d(1, 2, 3), pySunlight.Vec3d(2, 3, 1), pySunlight.Vec3d(3, 2, 1), "test", "test")
@@ -56,4 +55,4 @@ class TestConversionSunlightToTiler(unittest.TestCase):
         result = SunlightToTiler.convert_to_feature_list_with_triangle_level(triangle_soup)
 
         self.assertTrue(np.equal(result.features[0].centroid, feature.centroid).all(), "Centroid shifted during conversion")
-        self.assertTrue(np.equal(result.features[0].get_geom_as_triangles() , feature.get_geom_as_triangles()).all(), "Geometry error when converting")
+        self.assertTrue(np.equal(result.features[0].get_geom_as_triangles(), feature.get_geom_as_triangles()).all(), "Geometry error when converting")

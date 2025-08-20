@@ -8,8 +8,6 @@ from py3dtiles import TilesetReader
 from src.main import compute_3DTiles_sunlight
 from src.pySunlight import SunDatas, Vec3d
 from src.Writers import CsvWriter, TileWriter
-from src.Aggregators.AggregatorController import AggregatorControllerInBatchTable
-import shutil
 
 # Test if the computed result is identical to a previous result
 

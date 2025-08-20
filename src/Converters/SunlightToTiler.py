@@ -74,6 +74,7 @@ def convert_to_feature_list_with_triangle_level(triangle_soup: pySunlight.Triang
 
     return triangles_as_features
 
+
 def init_batch_table(feature: Feature):
     """
     This function initialise the batch table of a Feature for later use
@@ -82,15 +83,16 @@ def init_batch_table(feature: Feature):
     :type feature: Feature
     """
 
-    #Check if a feature has already been initialised
+    # Check if a feature has already been initialised
     if 'ID_triangle' in feature.get_batchtable_data():
-            print("Double initialisation of a feature", file=stderr)
-            return
+        print("Double initialisation of a feature", file=stderr)
+        return
 
     feature.add_batchtable_data('ID_triangle', [])
     feature.add_batchtable_data('date', [])
     feature.add_batchtable_data('bLighted', [])
     feature.add_batchtable_data('occultingId', [])
+
 
 def record_result_in_batch_table(feature: Feature, date_str: str, bLighted: bool, occulting_id: str):
     """

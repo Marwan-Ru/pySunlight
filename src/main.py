@@ -56,7 +56,7 @@ def is_closer(testing_ray_hit, nearest_ray_hit: pySunlight.RayHit):
     return not nearest_ray_hit or testing_ray_hit.distance < nearest_ray_hit.distance
 
 
-def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, writer: Writer, anexTileset : TileSet = None):
+def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, writer: Writer, anexTileset: TileSet = None):
     """
     The function `compute_3DTiles_sunlight` computes sunlight visibility for each triangle in a 3D
     tileset and exports the results.
@@ -76,7 +76,7 @@ def compute_3DTiles_sunlight(tileset: TileSet, sun_datas: pySunlight.SunDatas, w
     """
     # Loop in tileset.json
     all_tiles = tileset.get_root_tile().get_children()
-    if anexTileset == None:
+    if anexTileset is None:
         compared_tiles = all_tiles
     else:
         compared_tiles = anexTileset.get_root_tile().get_children()
@@ -186,7 +186,7 @@ def produce_3DTiles_sunlight(sun_datas_list: pySunlight.SunDatasList, tiler: Til
         writer.set_directory(CURRENT_OUTPUT_DIRECTORY)
         writer.create_directory()
 
-        if args.secondary != None:
+        if args.secondary is not None:
             compute_3DTiles_sunlight(tileset, sun_datas, writer, TilesetReader().read_tileset(args.secondary))
         else:
             compute_3DTiles_sunlight(tileset, sun_datas, writer)
